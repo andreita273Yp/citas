@@ -74,9 +74,10 @@ services:
     volumes:
       - ./citas-web:/workspace
       - node_cache:/root/.npm
+      # Evita montar dependencias Windows dentro del contenedor Linux.
+      - web_node_modules:/workspace/node_modules
 
     ports:
-      - "${REACT_PORT:-5173}:5173"
       - "${ANGULAR_PORT:-4200}:4200"
 
     depends_on:
@@ -92,3 +93,4 @@ volumes:
   mysql_data:
   maven_cache:
   node_cache:
+  web_node_modules:

@@ -1,6 +1,6 @@
 # Proyecto FCV — Sistema ficticio de agendamiento de citas
 
-Plantilla de trabajo para las sesiones **S2 a S6** de la formación de agentes de desarrollo. El paquete deja deliberadamente **vacíos de lógica de negocio** los repositorios `citas-api` y `citas-web`: el objetivo es que cada estudiante los construya con agentes, especificaciones, pruebas y automatización, manteniendo evidencia mediante Git.
+Workspace de trabajo para las sesiones **S2 a S6** de la formación de agentes de desarrollo. Contiene dos repositorios independientes con una línea base ya importada: `citas-api` (Spring Boot) y `citas-web` (Angular). La construcción posterior se gobierna por HU, pruebas y evidencia Git.
 
 > **Importante:** el dominio es académico. Las sedes y algunos nombres de especialidades se apoyan en información pública de FCV; pacientes, profesionales, credenciales, EPS, planes, horarios y citas son datos sintéticos. No representa sistemas ni procesos internos reales de FCV.
 
@@ -18,8 +18,8 @@ FCV_Proyecto_Citas_v1/
 ├── prompts/
 ├── skills/
 ├── scripts/
-├── citas-api/       # Repo Git 1: Java/Spring Boot, inicialmente sin implementación
-└── citas-web/       # Repo Git 2: React o Angular, inicialmente sin implementación
+├── citas-api/       # Repo Git 1: Java/Spring Boot
+└── citas-web/       # Repo Git 2: Angular + TypeScript
 ```
 
 ## Stack objetivo
@@ -36,9 +36,7 @@ FCV_Proyecto_Citas_v1/
 - JWT access + refresh token.
 
 ### Frontend
-El estudiante decide el framework al exportar/continuar desde Stitch y Google AI Studio:
-- React + TypeScript, **o**
-- Angular + TypeScript.
+El frontend importado usa Angular 21 + TypeScript.
 
 Node.js 24 LTS es el runtime/toolchain. **No se usa Express ni BFF.** El frontend consume directamente `citas-api` por REST.
 
@@ -105,13 +103,20 @@ docker compose ps
 .\scripts\db-smoke-test.ps1
 ```
 
-5. Si quieres disponer también de toolchains Java/Node dentro de contenedores:
+5. Para disponer de los toolchains Java/Node dentro de contenedores:
 
 ```powershell
-docker compose --profile dev up -d
+docker compose up -d
 ```
 
-Estos contenedores **no contienen la aplicación**. Solo montan los repos vacíos y ofrecen Java/Maven y Node para que el estudiante inicialice sus proyectos.
+Instala las dependencias Angular dentro del volumen Linux aislado y ejecuta el cliente en el puerto 4200:
+
+```powershell
+docker compose exec citas-web-dev npm ci
+docker compose exec citas-web-dev npm run start -- --host 0.0.0.0 --port 4200
+```
+
+El volumen `web_node_modules` evita mezclar binarios nativos de Windows y Linux. Para pruebas y build, usa el mismo contenedor después de `npm ci`.
 
 ## Inicializar Git
 
