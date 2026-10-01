@@ -29,4 +29,5 @@ SELECT COUNT(*) AS appointments_count FROM appointments;
 
 $sql | docker compose exec -T mysql mysql -uroot -p$rootPassword
 if ($LASTEXITCODE -ne 0) { throw "Smoke test DB falló" }
-Write-Host "[OK] db.sql cargado y consultable." -ForegroundColor Green
+# El esquema lo crea Flyway (citas-api V6 + db/seed) al arrancar el backend por primera vez.
+Write-Host "[OK] Modelo de referencia migrado por Flyway y consultable." -ForegroundColor Green
